@@ -30,9 +30,9 @@ def get_average(data_by_location, window_size):
     return data_by_location["LMP"].rolling(window=window_size).mean(numeric_only=True).round(decimals=2)
 
 
-def schedule_resources_in_lowest_price_windows(resources: list,
-                                               data_by_location: pd.DataFrame,
-                                               num_minutes_in_interval: int):
+def get_lowest_price_window_for_each_resource(resources: list,
+                                              data_by_location: pd.DataFrame,
+                                              num_minutes_in_interval: int):
     col_name: str = "Rolling Average"
     allocated = []
     for resource in resources:

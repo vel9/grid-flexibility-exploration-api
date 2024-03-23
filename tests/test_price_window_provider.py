@@ -4,7 +4,7 @@ import pandas as pd
 from pandas import Timestamp
 
 from models import Resource
-from resource_planner_service import get_window_size, schedule_resources_in_lowest_price_windows, \
+from price_window_provider import get_window_size, get_lowest_price_window_for_each_resource, \
     get_n_windows_with_lowest_price
 
 
@@ -32,7 +32,7 @@ class ResourcePlannerServiceTestCase(unittest.TestCase):
 
         slots_df = pd.DataFrame(slots, columns=["Time", "LMP"])
         num_mins_in_interval = 60
-        result = schedule_resources_in_lowest_price_windows(resources, slots_df, num_mins_in_interval)
+        result = get_lowest_price_window_for_each_resource(resources, slots_df, num_mins_in_interval)
         # make sure we select our last generated timestamp as end of optimal window
         self.assertEqual(self.get_timestamp(23), result[1][1])
         # 11 + 11 / 2 = 11
