@@ -30,7 +30,7 @@ class ResourcePlannerServiceTestCase(unittest.TestCase):
             slots.append([Timestamp('20240308') + pd.Timedelta(hours=interval), 17])
         slots[23][1] = 5  # force last window to be optimal
 
-        slots_df = pd.DataFrame(slots, columns=["Time", "Value"])
+        slots_df = pd.DataFrame(slots, columns=["Time", "LMP"])
         num_mins_in_interval = 60
         result = schedule_resources_in_lowest_price_windows(resources, slots_df, num_mins_in_interval)
         # make sure we select our last generated timestamp as end of optimal window
@@ -57,10 +57,10 @@ class ResourcePlannerServiceTestCase(unittest.TestCase):
                                                  num_mins_in_interval)
 
         self.assertEqual(8, len(result))
-        self.assert_window_values("Option 1", 4, 23, result[1])
-        self.assert_window_values("Option 2", 7, 10, result[3])
-        self.assert_window_values("Option 3", 7, 11, result[5])
-        self.assert_window_values("Option 4", 8, 22, result[7])
+        self.assert_window_values("Window 1", 4, 23, result[1])
+        self.assert_window_values("Window 2", 7, 10, result[3])
+        self.assert_window_values("Window 3", 7, 11, result[5])
+        self.assert_window_values("Window 4", 8, 22, result[7])
 
     def assert_window_values(self, expected_name, expected_avg, expected_hour, endpoint):
         self.assertEqual(expected_name, endpoint[0])

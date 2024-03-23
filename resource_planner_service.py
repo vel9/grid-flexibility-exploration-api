@@ -19,7 +19,7 @@ def get_n_windows_with_lowest_price(resource,
         end_time = row[0]
         start_time = end_time - pd.Timedelta(hours=(resource.hours - 1))
         rolling_avg_value = row[3]
-        name = "Option " + str(idx + 1)
+        name = "Window " + str(idx + 1)
         allocated.append([name, start_time, rolling_avg_value])
         allocated.append([name, end_time, rolling_avg_value])
 
