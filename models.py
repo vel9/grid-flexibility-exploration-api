@@ -3,7 +3,7 @@ from database import Base
 
 
 class Resource(Base):
-    __tablename__ = "resource"
+    __tablename__ = 'resource'
 
     unique_id = Column(String(50), primary_key=True)
     name = Column(String(50))

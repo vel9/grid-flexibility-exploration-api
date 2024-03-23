@@ -7,10 +7,10 @@ from resource_planner_service import schedule_resources_in_lowest_price_windows,
 def get_resources_with_lowest_price_windows():
     chart, table_data, grid_query = get_lowest_price_windows(query_all_resources())
     return {
-        "resources": get_resources_as_dict(),
-        "chart": chart,
-        "table": table_data,
-        "query": grid_query
+        'resources': get_resources_as_dict(),
+        'chart': chart,
+        'table': table_data,
+        'query': grid_query
     }
 
 
@@ -19,10 +19,10 @@ def get_resource_with_lowest_price_windows(resource_id: str):
     resource = query_resource_by_id(resource_id)
     chart, table, grid_query = get_n_lowest_prices_windows_for_resource(resource, num_windows)
     return {
-        "resource": resource.as_dict(),
-        "chart": chart,
-        "table": table,
-        "query": grid_query
+        'resource': resource.as_dict(),
+        'chart': chart,
+        'table': table,
+        'query': grid_query
     }
 
 
@@ -41,9 +41,7 @@ def get_lowest_price_window_for_resources():
 def get_lowest_price_windows(resources):
     num_mins_in_interval = 60
     grid_query_params = get_grid_query_parameters()
-    day_ahead_price_data = get_price_data_by_location(grid_query_params["date"],
-                                                      grid_query_params["location"],
-                                                      grid_query_params["market"])
+    day_ahead_price_data = get_price_data_by_location(grid_query_params)
     allocated_resources_day_ahead = schedule_resources_in_lowest_price_windows(resources,
                                                                                day_ahead_price_data,
                                                                                num_mins_in_interval)
@@ -54,10 +52,7 @@ def get_lowest_price_windows(resources):
 def get_n_lowest_prices_windows_for_resource(resource, num_windows):
     num_mins_in_interval = 60
     grid_query_params = get_grid_query_parameters()
-    day_ahead_price_data = get_price_data_by_location(grid_query_params["date"],
-                                                      grid_query_params["location"],
-                                                      grid_query_params["market"])
-
+    day_ahead_price_data = get_price_data_by_location(grid_query_params)
     allocated_resources_day_ahead = get_n_windows_with_lowest_price(resource,
                                                                     day_ahead_price_data,
                                                                     num_windows,
@@ -68,8 +63,8 @@ def get_n_lowest_prices_windows_for_resource(resource, num_windows):
 
 def get_grid_query_parameters():
     return {
-        "date": "February 26, 2024",
-        "location": "GENESE",
-        "market": "DAY_AHEAD_HOURLY",
-        "operator": "NYISO"
+        'date': "February 26, 2024",
+        'location': "GENESE",
+        'market': "DAY_AHEAD_HOURLY",
+        'operator': "NYISO"
     }
