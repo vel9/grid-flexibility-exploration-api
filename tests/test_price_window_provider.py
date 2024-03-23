@@ -34,7 +34,7 @@ class ResourcePlannerServiceTestCase(unittest.TestCase):
         num_mins_in_interval = 60
         result = get_lowest_price_window_for_each_resource(resources, slots_df, num_mins_in_interval)
         # make sure we select our last generated timestamp as end of optimal window
-        self.assertEqual(self.get_timestamp(23), result[1][1])
+        self.assertEqual(get_timestamp(23), result[1][1])
         # 11 + 11 / 2 = 11
         self.assertEqual(11, result[1][2])
 
@@ -42,7 +42,7 @@ class ResourcePlannerServiceTestCase(unittest.TestCase):
         resource = Resource("123", "A",  2)
         slots = []
         for interval in range(24):
-            slots.append([self.get_timestamp(interval), "GENESE", 10])
+            slots.append([get_timestamp(interval), "GENESE", 10])
         # force low prices
         slots[10][2] = 4
         slots[22][2] = 6
@@ -64,11 +64,11 @@ class ResourcePlannerServiceTestCase(unittest.TestCase):
 
     def assert_window_values(self, expected_name, expected_avg, expected_hour, endpoint):
         self.assertEqual(expected_name, endpoint[0])
-        self.assertEqual(self.get_timestamp(expected_hour), endpoint[1])
+        self.assertEqual(get_timestamp(expected_hour), endpoint[1])
         self.assertEqual(expected_avg, endpoint[2])
 
-    def get_timestamp(self, add_hours):
-        return Timestamp('20240308') + pd.Timedelta(hours=add_hours)
+def get_timestamp(add_hours):
+    return Timestamp('20240308') + pd.Timedelta(hours=add_hours)
 
 
 if __name__ == '__main__':
