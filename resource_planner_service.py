@@ -12,7 +12,7 @@ def get_n_windows_with_lowest_price(resource,
     window_size = get_window_size(resource.hours, num_minutes_in_interval)
 
     # add a column representing rolling average ending at given column
-    data_by_location_copy[col_name] = data_by_location_copy["LMP"].rolling(window=window_size).mean(numeric_only=True)
+    data_by_location_copy[col_name] = get_average(data_by_location_copy, window_size)
     rows_with_min_rolling_avg = data_by_location_copy.nsmallest(num_windows, col_name).values.tolist()
     for idx in range(len(rows_with_min_rolling_avg)):
         row = rows_with_min_rolling_avg[idx]
@@ -26,6 +26,10 @@ def get_n_windows_with_lowest_price(resource,
     return allocated
 
 
+def get_average(data_by_location, window_size):
+    return data_by_location["LMP"].rolling(window=window_size).mean(numeric_only=True).round(decimals=2)
+
+
 def schedule_resources_in_lowest_price_windows(resources: list,
                                                data_by_location: pd.DataFrame,
                                                num_minutes_in_interval: int):
@@ -35,7 +39,7 @@ def schedule_resources_in_lowest_price_windows(resources: list,
         data_by_location_copy = data_by_location.copy()
         window_size = get_window_size(resource.hours, num_minutes_in_interval)
         # add a column representing rolling average ending at given column
-        data_by_location_copy[col_name] = data_by_location_copy.rolling(window=window_size).mean(numeric_only=True)
+        data_by_location_copy[col_name] = get_average(data_by_location_copy, window_size)
 
         min_df = data_by_location_copy.min()
         rows_with_min_rolling_avg = data_by_location_copy[data_by_location_copy[col_name] == min_df[col_name].min()]
