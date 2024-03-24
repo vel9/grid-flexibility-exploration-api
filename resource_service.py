@@ -60,7 +60,7 @@ def get_lowest_price_window_for_resources():
     return get_lowest_price_windows(query_all_resources())
 
 
-def get_lowest_price_windows(resources, num_mins_in_interval=60):
+def get_lowest_price_windows(resources: list[Resource], num_mins_in_interval: int=60):
     """
     Get lowest price window for each resource and structure it
     for chart display
@@ -78,7 +78,9 @@ def get_lowest_price_windows(resources, num_mins_in_interval=60):
     return get_chart_data(lowest_price_windows, price_data, grid_query_params)
 
 
-def get_n_lowest_prices_windows_for_resource(resource, num_windows, num_mins_in_interval=60):
+def get_n_lowest_prices_windows_for_resource(resource: Resource,
+                                             num_windows: int,
+                                             num_mins_in_interval: int=60):
     """
     Get n lowest price windows for single resource and structure it
     for chart display

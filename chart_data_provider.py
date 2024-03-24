@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def get_chart_data(lowest_price_windows, price_data, grid_query):
+def get_chart_data(lowest_price_windows: list, price_data: list, grid_query: dict):
     """
     Get formatted/structured data for chart display
 
@@ -13,7 +13,7 @@ def get_chart_data(lowest_price_windows, price_data, grid_query):
     return get_plotly_chart_data(lowest_price_windows, price_data, grid_query)
 
 
-def get_plotly_chart_data(lowest_price_windows, price_data, grid_query):
+def get_plotly_chart_data(lowest_price_windows: list, price_data: list, grid_query: dict):
     """
     Get formatted data for plotly js
 
@@ -35,7 +35,7 @@ def get_plotly_chart_data(lowest_price_windows, price_data, grid_query):
     return chart_data_traces, table_data, grid_query
 
 
-def get_table_row(start_point, end_point, date_format):
+def get_table_row(start_point: list, end_point: list, date_format: str):
     """
     Get data for table row
 
@@ -54,7 +54,7 @@ def get_table_row(start_point, end_point, date_format):
     }
 
 
-def get_price_data_trace(price_data, date_format):
+def get_price_data_trace(price_data: list, date_format: str):
     """
     Format price data for plotly, reformat date
 
@@ -77,7 +77,7 @@ def get_price_data_trace(price_data, date_format):
     }
 
 
-def get_window_trace(start_point, end_point, date_format):
+def get_window_trace(start_point: list, end_point: list, date_format: str):
     """
     Get trace for resource window
 

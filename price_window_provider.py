@@ -1,8 +1,10 @@
 import math
 import pandas as pd
 
+from models import Resource
 
-def get_n_windows_with_lowest_price(resource,
+
+def get_n_windows_with_lowest_price(resource: Resource,
                                     price_data: pd.DataFrame,
                                     num_windows: int,
                                     num_minutes_in_interval: int):
@@ -35,7 +37,7 @@ def get_n_windows_with_lowest_price(resource,
     return allocated
 
 
-def get_average(price_data, window_size):
+def get_average(price_data: pd.DataFrame, window_size: int):
     """
     Helper function for calculating rolling average for price
 
