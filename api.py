@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from database import db_session
 from resource_data_service import insert_resource, delete_resource_by_id
 from resource_service import get_resource_and_lowest_price_windows, get_resources_and_lowest_price_windows
+from validator import validate_add_resource
 
 app = Flask(__name__)
 
@@ -30,12 +31,16 @@ def get_resource(resource_id):
 @app.route('/resource/add', methods=['POST'])
 def add_resource():
     """
-    insert new resource in data store
+    validate params and insert new resource in data store
 
     :return: success if inserted
     """
     name = request.form['name']
     hours = request.form['hours']
+    result = validate_add_resource(name, hours)
+    if result.has_errors:
+        return vars(result)
+
     insert_resource(name, int(hours))
     return jsonify(success=True)
 
