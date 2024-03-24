@@ -5,7 +5,7 @@ def get_chart_data(lowest_price_windows, price_data, grid_query):
     """
     Get formatted/structured data for chart display
 
-    :param lowest_price_windows: windows within price data
+    :param lowest_price_windows: windows within price time series
     :param price_data: price data from grid
     :param grid_query: query used for querying grid
     :return: chart data
@@ -13,11 +13,11 @@ def get_chart_data(lowest_price_windows, price_data, grid_query):
     return get_plotly_chart_data(lowest_price_windows, price_data, grid_query)
 
 
-def get_plotly_chart_data(lowest_price_windows, day_ahead_price_data, grid_query):
+def get_plotly_chart_data(lowest_price_windows, price_data, grid_query):
     """
     Get formatted data for plotly js
 
-    :param lowest_price_windows: windows within price data
+    :param lowest_price_windows: windows within price time series
     :param price_data: price data from grid
     :param grid_query: query used for querying grid
     :return: chart data
@@ -31,7 +31,7 @@ def get_plotly_chart_data(lowest_price_windows, day_ahead_price_data, grid_query
         chart_data_traces.append(get_window_trace(start_point, end_point, date_format))
         table_data.append(get_table_row(start_point, end_point, date_format))
 
-    chart_data_traces.append(get_price_data_trace(day_ahead_price_data, date_format))
+    chart_data_traces.append(get_price_data_trace(price_data, date_format))
     return chart_data_traces, table_data, grid_query
 
 
