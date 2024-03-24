@@ -21,13 +21,13 @@ def validate_add_resource(name: str, hour: str):
     """
     errors = {}
     if not name:
-        errors['name'] = "Name must not be empty"
+        errors['name'] = "Must not be empty"
 
     if not hour:
-        errors['hours'] = "Hour must not be empty"
+        errors['hours'] = "Must not be empty"
     elif not hour.isdigit():
-        errors['hours'] = "Hour must be an integer"
+        errors['hours'] = "Must be a number"
     elif int(hour) < 1 or int(hour) > 23:
-        errors['hours'] = "Hour must be between 1 and 23"
+        errors['hours'] = "Must be between 1 and 23"
 
     return ValidatorResult(bool(errors), errors)
