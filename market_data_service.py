@@ -1,17 +1,16 @@
-import pandas as pd
-from pandas import Timestamp
+import gridstatus
 
-market_data = [
-
-]
+cache = {}
 
 def get_price_data_by_location(grid_query_params):
-    date = grid_query_params["date"]
-    location = grid_query_params["location"]
-    market = grid_query_params["market"]
-    for iter in range(len(market_data)):
-        market_data[iter][1] = Timestamp('20240226') + pd.Timedelta(hours=iter)
-    lmp = pd.DataFrame(market_data, columns=["Id","Time", "Location", "LMP"])
+    date = grid_query_params['date']
+    location = grid_query_params['location']
+    market = grid_query_params['market']
+    if date in cache:
+        return cache[date]
+
+    lmp = gridstatus.NYISO().get_lmp(date=date, market=market)
     lmp_col_subset = lmp[["Time", "Location", "LMP"]]
     lmp_subset_filtered = lmp_col_subset[lmp_col_subset["Location"] == location]
+    cache[date]= lmp_subset_filtered
     return lmp_subset_filtered

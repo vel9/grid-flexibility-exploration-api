@@ -1,3 +1,5 @@
+import pandas as pd
+
 from chart_data_provider import get_chart_data
 from market_data_service import get_price_data_by_location
 from models import Resource
@@ -108,8 +110,37 @@ def get_grid_query_parameters():
     :return: grid query parameters
     """
     return {
-        'date': "February 26, 2024",
+        'date': get_query_date(),
         'location': "GENESE",
         'market': "DAY_AHEAD_HOURLY",
         'operator': "NYISO"
     }
+
+
+def get_query_date():
+    """
+    query with tomorrow's date for day ahead prices
+
+    :return: formatted date
+    """
+    return get_grid_query_date(get_next_day(pd.to_datetime('today')))
+
+
+def get_grid_query_date(date_time: pd.Timestamp):
+    """
+    Format timestamp as 'February 26, 2024'
+
+    :param date_time: timestamp to format
+    :return: formatted date
+    """
+    return date_time.strftime("%B %d, %Y")
+
+
+def get_next_day(date_time: pd.Timestamp):
+    """
+    Add 1 day to provided timestamp
+
+    :param date_time: timestamp
+    :return: timestamp with one day added
+    """
+    return date_time + pd.Timedelta(days=1)
