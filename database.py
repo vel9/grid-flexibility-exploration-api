@@ -10,5 +10,8 @@ Base.query = db_session.query_property()
 
 
 def init_db():
+    """
+    Initiate sqlite3 database connector
+    """
     import models
     Base.metadata.create_all(bind=engine)

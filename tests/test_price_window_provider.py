@@ -67,6 +67,7 @@ class ResourcePlannerServiceTestCase(unittest.TestCase):
         self.assertEqual(get_timestamp(expected_hour), endpoint[1])
         self.assertEqual(expected_avg, endpoint[2])
 
+
 def get_timestamp(add_hours):
     return Timestamp('20240308') + pd.Timedelta(hours=add_hours)
 

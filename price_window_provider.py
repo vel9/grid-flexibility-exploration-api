@@ -3,17 +3,26 @@ import pandas as pd
 
 
 def get_n_windows_with_lowest_price(resource,
-                                    data_by_location: pd.DataFrame,
+                                    price_data: pd.DataFrame,
                                     num_windows: int,
                                     num_minutes_in_interval: int):
+    """
+    Get n windows with lowest average price within price data
+
+    :param resource: resource for which we're getting lowest windows
+    :param price_data: price data
+    :param num_windows: number of windows
+    :param num_minutes_in_interval: number of minutes in each price interval
+    :return: windows with lowest price
+    """
     col_name: str = "Rolling Average"
     allocated = []
-    data_by_location_copy = data_by_location.copy()
+    price_data_copy = price_data.copy()
     window_size = get_window_size(resource.hours, num_minutes_in_interval)
 
     # add a column representing rolling average ending at given column
-    data_by_location_copy[col_name] = get_average(data_by_location_copy, window_size)
-    rows_with_min_rolling_avg = data_by_location_copy.nsmallest(num_windows, col_name).values.tolist()
+    price_data_copy[col_name] = get_average(price_data_copy, window_size)
+    rows_with_min_rolling_avg = price_data_copy.nsmallest(num_windows, col_name).values.tolist()
     for idx in range(len(rows_with_min_rolling_avg)):
         row = rows_with_min_rolling_avg[idx]
         end_time = row[0]
@@ -26,23 +35,38 @@ def get_n_windows_with_lowest_price(resource,
     return allocated
 
 
-def get_average(data_by_location, window_size):
-    return data_by_location["LMP"].rolling(window=window_size).mean(numeric_only=True).round(decimals=2)
+def get_average(price_data, window_size):
+    """
+    Helper function for calculating rolling average for price
+
+    :param price_data: price data
+    :param window_size: number of rows in window
+    :return: rolling average column with values
+    """
+    return price_data["LMP"].rolling(window=window_size).mean(numeric_only=True).round(decimals=2)
 
 
 def get_lowest_price_window_for_each_resource(resources: list,
-                                              data_by_location: pd.DataFrame,
+                                              price_data: pd.DataFrame,
                                               num_minutes_in_interval: int):
+    """
+    For each resource find the single lowest/best price window
+
+    :param resources: list of resources
+    :param price_data: price data
+    :param num_minutes_in_interval: number of minutes in each price interval
+    :return:
+    """
     col_name: str = "Rolling Average"
     allocated = []
     for resource in resources:
-        data_by_location_copy = data_by_location.copy()
+        price_data_copy = price_data.copy()
         window_size = get_window_size(resource.hours, num_minutes_in_interval)
         # add a column representing rolling average ending at given column
-        data_by_location_copy[col_name] = get_average(data_by_location_copy, window_size)
+        price_data_copy[col_name] = get_average(price_data_copy, window_size)
 
-        min_df = data_by_location_copy.min()
-        rows_with_min_rolling_avg = data_by_location_copy[data_by_location_copy[col_name] == min_df[col_name].min()]
+        min_df = price_data_copy.min()
+        rows_with_min_rolling_avg = price_data_copy[price_data_copy[col_name] == min_df[col_name].min()]
 
         # only get end time from first matching window
         end_time = rows_with_min_rolling_avg["Time"].iloc[0]
