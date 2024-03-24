@@ -9,6 +9,7 @@ from price_window_provider import get_window_size, get_lowest_price_window_for_e
 
 
 class PriceWindowProviderTestCase(unittest.TestCase):
+
     def test_get_window_size_by_invalid_num_hours(self):
         with self.assertRaises(ValueError):
             get_window_size(0, 5)

@@ -4,6 +4,7 @@ import validator
 
 
 class ValidatorTestCase(unittest.TestCase):
+
     def test_validate_add_resource_by_empty_name(self):
         result = validator.validate_add_resource("", "1")
         self.assertEqual(True, result.has_errors)  # add assertion here
