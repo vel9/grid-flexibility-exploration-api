@@ -29,28 +29,30 @@ def get_plotly_chart_data(lowest_price_windows: list, price_data: list, grid_que
         start_point = lowest_price_windows[idx]
         end_point = lowest_price_windows[idx + 1]
         chart_data_traces.append(get_window_trace(start_point, end_point, date_format))
-        table_data.append(get_table_row(start_point, end_point, date_format))
+        table_data.append(get_table_row(start_point, end_point))
 
     chart_data_traces.append(get_price_data_trace(price_data, date_format))
     return chart_data_traces, table_data, grid_query
 
 
-def get_table_row(start_point: list, end_point: list, date_format: str):
+def get_table_row(start_point: list, end_point: list):
     """
     Get data for table row
 
     :param start_point: window start
     :param end_point: window end
-    :param date_format: formatter
     :return: table row data
     """
-    start_time = start_point[1].strftime(date_format)
-    end_time = end_point[1].strftime(date_format)
+    time_format = '%-I %p'
+    start_time = start_point[1].strftime(time_format)
+    end_time = end_point[1].strftime(time_format)
     return {
         'name': start_point[0],
         'start': start_time,
         'end': end_time,
-        'average': start_point[2]
+        'average': start_point[2],
+        'unique_id': start_point[3],
+        'hours': start_point[4]
     }
 
 

@@ -31,8 +31,8 @@ def get_n_windows_with_lowest_price(resource: Resource,
         start_time = end_time - pd.Timedelta(hours=(resource.hours - 1))
         rolling_avg_value = row[3]
         name = "Window " + str(idx + 1)
-        allocated.append([name, start_time, rolling_avg_value])
-        allocated.append([name, end_time, rolling_avg_value])
+        allocated.append(get_window_row(name, resource, rolling_avg_value, start_time))
+        allocated.append(get_window_row(name, resource, rolling_avg_value, end_time))
 
     return allocated
 
@@ -75,10 +75,14 @@ def get_lowest_price_window_for_each_resource(resources: list,
         start_time = end_time - pd.Timedelta(hours=(resource.hours - 1))
         rolling_avg_value = rows_with_min_rolling_avg[col_name].iloc[0]
 
-        allocated.append([resource.name, start_time, rolling_avg_value])
-        allocated.append([resource.name, end_time, rolling_avg_value])
+        allocated.append(get_window_row(resource.name, resource, rolling_avg_value, start_time))
+        allocated.append(get_window_row(resource.name, resource, rolling_avg_value, end_time))
 
     return allocated
+
+
+def get_window_row(name, resource, rolling_avg_value, start_time):
+    return [name, start_time, rolling_avg_value, resource.unique_id, resource.hours]
 
 
 def get_window_size(num_hours: int, num_minutes_in_interval: int):
