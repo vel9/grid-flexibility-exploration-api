@@ -1,3 +1,5 @@
+from urllib.error import HTTPError
+
 import pandas as pd
 
 from chart_data_provider import get_chart_data
@@ -62,7 +64,7 @@ def get_lowest_price_window_for_resources():
     return get_lowest_price_windows(query_all_resources())
 
 
-def get_lowest_price_windows(resources: list[Resource], num_mins_in_interval: int=60):
+def get_lowest_price_windows(resources: list[Resource], num_mins_in_interval: int = 60):
     """
     Get lowest price window for each resource and structure it
     for chart display
@@ -71,8 +73,7 @@ def get_lowest_price_windows(resources: list[Resource], num_mins_in_interval: in
     :param num_mins_in_interval: minutes in price interval
     :return: data structured for chart display
     """
-    grid_query_params = get_grid_query_parameters()
-    price_data = get_price_data_by_location(grid_query_params)
+    grid_query_params, price_data = get_price_data_from_grid()
     lowest_price_windows = get_lowest_price_window_for_each_resource(resources,
                                                                      price_data,
                                                                      num_mins_in_interval)
@@ -82,7 +83,7 @@ def get_lowest_price_windows(resources: list[Resource], num_mins_in_interval: in
 
 def get_n_lowest_prices_windows_for_resource(resource: Resource,
                                              num_windows: int,
-                                             num_mins_in_interval: int=60):
+                                             num_mins_in_interval: int = 60):
     """
     Get n lowest price windows for single resource and structure it
     for chart display
@@ -92,8 +93,7 @@ def get_n_lowest_prices_windows_for_resource(resource: Resource,
     :param num_mins_in_interval: minutes in price interval
     :return: data structured for chart display
     """
-    grid_query_params = get_grid_query_parameters()
-    price_data = get_price_data_by_location(grid_query_params)
+    grid_query_params, price_data = get_price_data_from_grid()
     lowest_price_windows = get_n_windows_with_lowest_price(resource,
                                                            price_data,
                                                            num_windows,
@@ -102,28 +102,53 @@ def get_n_lowest_prices_windows_for_resource(resource: Resource,
     return get_chart_data(lowest_price_windows, price_data, grid_query_params)
 
 
-def get_grid_query_parameters():
+def get_price_data_from_grid():
+    """
+    Query grid with tomorrow's day for day ahead prices
+    It's possible prices for tomorrow are not yet published
+    If so, fall back to using today's prices
+
+    :return: query used and related price data
+    """
+    try:
+        grid_query_params = get_grid_query_parameters("tomorrow")
+        price_data = get_price_data_by_location(grid_query_params)
+    except HTTPError:
+        grid_query_params = get_grid_query_parameters("today")
+        grid_query_params['fallback'] = True
+        price_data = get_price_data_by_location(grid_query_params)
+
+    return grid_query_params, price_data
+
+
+def get_grid_query_parameters(date_type: str):
     """
     Provide query for grid market data
     Requests prices for day ahead (i.e. tomorrow)
 
+    :param date_type: get date given provided date type
     :return: grid query parameters
     """
     return {
-        'date': get_query_date(),
+        'date': get_grid_query_date(get_datetime(date_type)),
         'location': "GENESE",
         'market': "DAY_AHEAD_HOURLY",
-        'operator': "NYISO"
+        'operator': "NYISO",
+        'fallback': False
     }
 
 
-def get_query_date():
+def get_datetime(date_type: str):
     """
-    query with tomorrow's date for day ahead prices
+    Add day to current date if date_type is tomorrow
 
-    :return: formatted date
+    :param date_type: get date given provided date type
+    :return: datetime
     """
-    return get_grid_query_date(get_next_day(pd.to_datetime('today')))
+    if date_type == "tomorrow":
+        return get_next_day(pd.to_datetime('today'))
+    else:
+        return pd.to_datetime('today')
 
 
 def get_grid_query_date(date_time: pd.Timestamp):
