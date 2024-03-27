@@ -12,10 +12,10 @@ class MarketDataServiceTestCase(unittest.TestCase):
         get_price_data_by_location(params)
         self.assertEqual(1, mock_mds_fn.call_count)
         get_price_data_by_location(params)
-        self.assertEqual(1, mock_mds_fn.call_count) # cached result for a
+        self.assertEqual(1, mock_mds_fn.call_count)  # cached result for a
         params['date'] = "b"
         get_price_data_by_location(params)
-        self.assertEqual(2, mock_mds_fn.call_count) # but not for b
+        self.assertEqual(2, mock_mds_fn.call_count)  # but not for b
 
 if __name__ == '__main__':
     unittest.main()

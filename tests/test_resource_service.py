@@ -7,7 +7,7 @@ from pandas import Timestamp
 from resource_service import get_grid_query_date, get_next_day, get_datetime, get_price_data_from_grid
 
 
-class ResourceServiceCase(unittest.TestCase):
+class ResourceServiceTestCase(unittest.TestCase):
 
     def test_get_grid_query_date(self):
         self.assertEqual('February 26, 2024', get_grid_query_date(Timestamp('20240226')))
