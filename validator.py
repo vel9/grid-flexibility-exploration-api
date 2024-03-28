@@ -20,7 +20,7 @@ def validate_add_resource(name: str, hour: str):
     :return: validator result
     """
     errors = {}
-    if not name:
+    if not name or name.isspace():
         errors['name'] = "Must not be empty"
 
     if not hour:
