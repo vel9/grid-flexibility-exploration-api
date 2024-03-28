@@ -17,6 +17,8 @@ def get_plotly_chart_data(lowest_price_windows: list, price_data: list, grid_que
     """
     Get formatted data for plotly js
 
+    data structured per: https://plotly.com/javascript/react/
+
     :param lowest_price_windows: windows within price time series
     :param price_data: price data from grid
     :param grid_query: query used for querying grid
@@ -58,7 +60,7 @@ def get_table_row(start_point: list, end_point: list):
 
 def get_price_data_trace(price_data: list, date_format: str):
     """
-    Format price data for plotly, reformat date
+    Format price data, reformat date for plotly
 
     :param price_data: grid price data
     :param date_format: date format for plotly

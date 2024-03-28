@@ -15,6 +15,7 @@ def get_price_data_by_location(grid_query_params):
 
 
 def get_data_from_grid(date, location, market):
+    # ref: https://docs.gridstatus.io/en/latest/Examples/pjm/PJM%20LMP%20Data.html
     lmp = gridstatus.NYISO().get_lmp(date=date, market=market)
     lmp_col_subset = lmp[["Time", "Location", "LMP"]]
     lmp_subset_filtered = lmp_col_subset[lmp_col_subset["Location"] == location]

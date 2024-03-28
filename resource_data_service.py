@@ -18,6 +18,8 @@ def query_resource_by_id(resource_id: str):
     """
     Get resource by id from database
 
+    ref: https://docs.sqlalchemy.org/en/20/orm/session_basics.html#querying
+
     :param resource_id: resource unique id
     :return: found resource object
     """
@@ -39,6 +41,8 @@ def insert_resource(name: str, hours: int):
 def delete_resource_by_id(id_to_delete: str):
     """
     Hard delete resource from database
+
+    ref: https://docs.sqlalchemy.org/en/20/orm/session_basics.html#deleting
 
     :param id_to_delete: resource unique id
     """
